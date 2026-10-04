@@ -1,59 +1,67 @@
 import { type NextRequest, NextResponse } from "next/server"
+import { APPS_SCRIPT_URL } from "@/lib/apps-script-config"
 
-const SPREADSHEET_ID = "12ma-roMakKWnIPQjP8e83wujptbKI8p-Pn2Vmw_9b3M"
-const SHEET_NAME = "顧客ID"
-const API_KEY = "AIzaSyCMPwy12n9zl0qLHF-43bDQeikKEuKHUpA"
+async function fetchWithRedirect(url: string, options: RequestInit, maxRedirects = 5): Promise<Response> {
+  let currentUrl = url
+  let currentOptions = { ...options, redirect: "manual" as RequestRedirect }
+  for (let i = 0; i < maxRedirects; i++) {
+    const response = await fetch(currentUrl, currentOptions)
+    if (response.status >= 300 && response.status < 400) {
+      const location = response.headers.get("location")
+      if (location) {
+        currentUrl = location
+        currentOptions = { redirect: "manual" as RequestRedirect }
+        continue
+      }
+    }
+    return response
+  }
+  throw new Error("Too many redirects")
+}
 
 export async function POST(request: NextRequest) {
   try {
     const { email } = await request.json()
+    const normalizedEmail = email.trim().toLowerCase()
 
+    const params = new URLSearchParams({
+      action: "getUser",
+      email: normalizedEmail,
+    })
 
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), 15000)
 
-    // New layout: A=email, B=name, C=coins
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${encodeURIComponent(SHEET_NAME)}!A:C?key=${API_KEY}`
+    let data: Record<string, unknown>
+    try {
+      const response = await fetchWithRedirect(`${APPS_SCRIPT_URL}?${params.toString()}`, {
+        method: "GET",
+        signal: controller.signal,
+      })
+      clearTimeout(timeoutId)
 
-    const response = await fetch(url)
-
-    if (!response.ok) {
-      const errorText = await response.text()
-      console.error("[v0] Sheets API error:", response.status, errorText)
-
-      let errorMessage = "スプレッドシートの読み取りに失敗しました。"
-      if (response.status === 400) {
-        errorMessage = "APIキーが無効です。正しいGoogle Sheets APIキーを設定してください。"
-      } else if (response.status === 403) {
-        errorMessage =
-          "スプレッドシートへのアクセスが拒否されました。スプレッドシートを「リンクを知っている全員」に共有設定してください。"
+      const text = await response.text()
+      try {
+        data = JSON.parse(text)
+      } catch {
+        console.error("[v0] GAS returned non-JSON:", text.slice(0, 200))
+        return NextResponse.json({ exists: false, error: "GASからの応答が不正です" }, { status: 500 })
       }
-
-      return NextResponse.json(
-        {
-          error: errorMessage,
-          exists: false,
-        },
-        { status: 500 },
-      )
+    } catch (err) {
+      clearTimeout(timeoutId)
+      console.error("[v0] GAS fetch error:", err)
+      return NextResponse.json({ exists: false, error: "GASへの接続に失敗しました" }, { status: 500 })
     }
 
-    const data = await response.json()
-    const rows = data.values || []
-
-    // Skip header row (index 0) and search for email in A column
-    for (let i = 1; i < rows.length; i++) {
-      const row = rows[i]
-      if (row[0] && row[0].trim().toLowerCase() === email.trim().toLowerCase()) {
-        return NextResponse.json({
-          exists: true,
-          name: row[1] || "",
-          coins: Number.parseInt(row[2]) || 0,
-        })
-      }
+    if (!data.exists) {
+      return NextResponse.json({ exists: false })
     }
 
-    return NextResponse.json({ exists: false })
+    console.log("[v0] check-user GAS result:", data)
+    return NextResponse.json(data)
+
   } catch (error) {
-    console.error("[v0] Error checking user:", error)
-    return NextResponse.json({ error: "サーバーエラーが発生しました", exists: false }, { status: 500 })
+    console.error("[v0] check-user error:", error)
+    return NextResponse.json({ exists: false, error: "サーバーエラー" }, { status: 500 })
   }
 }
