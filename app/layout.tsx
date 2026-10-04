@@ -1,10 +1,10 @@
 import type { Metadata } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
+import { Noto_Sans_JP, Cinzel_Decorative } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
-const _geist = Geist({ subsets: ["latin"] });
-const _geistMono = Geist_Mono({ subsets: ["latin"] });
+const notoSansJP = Noto_Sans_JP({ subsets: ["latin"], weight: ["400", "700", "900"] });
+const cinzelDecorative = Cinzel_Decorative({ subsets: ["latin"], weight: ["400", "700", "900"], variable: "--font-cinzel" });
 
 export const metadata: Metadata = {
   title: 'v0 App',
@@ -35,7 +35,13 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
+    <html lang="ja" className={`${notoSansJP.className} ${cinzelDecorative.variable}`}>
+      <head>
+        {/* 重い背景画像をブラウザに最優先で先読みさせる */}
+        <link rel="preload" href="/loading-bg-new.png" as="image" />
+        <link rel="preload" href="/gacha-bg.png" as="image" />
+        <link rel="preload" href="/quest-alpha-logo.png" as="image" />
+      </head>
       <body className="font-sans antialiased">
         {children}
         {process.env.NODE_ENV === 'production' && <Analytics />}

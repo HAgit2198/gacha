@@ -4,10 +4,8 @@ import { APPS_SCRIPT_URL } from "@/lib/apps-script-config"
 async function fetchWithRedirect(url: string, options: RequestInit, maxRedirects = 5): Promise<Response> {
   let currentUrl = url
   let currentOptions = { ...options, redirect: "manual" as RequestRedirect }
-  
   for (let i = 0; i < maxRedirects; i++) {
     const response = await fetch(currentUrl, currentOptions)
-    
     if (response.status >= 300 && response.status < 400) {
       const location = response.headers.get("location")
       if (location) {
@@ -16,23 +14,21 @@ async function fetchWithRedirect(url: string, options: RequestInit, maxRedirects
         continue
       }
     }
-    
     return response
   }
-  
   throw new Error("Too many redirects")
 }
 
 export async function POST(request: Request) {
   try {
-    const { email, coins, spent } = await request.json()
+    const { email, spent } = await request.json()
 
-    // Update C column (coins) and add to D column (cumulative spending)
+    // 新構造：コイン獲得シートのF列（ガチャ使用）に消費枚数を追加
+    // action=spendCoins で GAS側が該当メールのF列に spent を加算
     const params = new URLSearchParams({
-      action: "updateCoins",
+      action: "spendCoins",
       email,
-      coins: String(coins),
-      spent: String(spent || 0),
+      amount: String(spent || 0),
     })
 
     const controller = new AbortController()
@@ -43,16 +39,9 @@ export async function POST(request: Request) {
         method: "GET",
         signal: controller.signal,
       })
-
       clearTimeout(timeoutId)
-
-      if (!response.ok) {
-        return NextResponse.json({ success: true, warning: "Sync failed" })
-      }
-
-      const result = await response.json()
-      return NextResponse.json({ success: true, synced: true })
-    } catch (fetchError: any) {
+      return NextResponse.json({ success: true, synced: response.ok })
+    } catch {
       clearTimeout(timeoutId)
       return NextResponse.json({ success: true, warning: "Sync timed out" })
     }
