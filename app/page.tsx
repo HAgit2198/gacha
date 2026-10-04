@@ -490,6 +490,8 @@ export default function WorldQuestGacha() {
             setEmail(storedEmail)
             setUserName(storedUserName)
             setScreen("gacha")
+            // セッション復元時もプリロードしないとコレクション画面がローディングのまま進まない
+            preloadAllImages()
 
             // Then sync latest unlock state and cards from spreadsheet in background
             try {
