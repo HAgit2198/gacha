@@ -780,18 +780,25 @@ export default function WorldQuestGacha() {
     const cost = drawCount === 1 ? world.cost : world.cost10
     if (coins < cost) return
 
+    // Calculate which pieces will be revealed（残りが無ければコインを消費しない）
+    const remaining = UR_TOTAL_PIECES - urPieceCount
+    const actualDraw = Math.min(drawCount === 1 ? 1 : remaining, remaining)
+    if (actualDraw <= 0) return
+
     unlockAudioContext()
     const newCoins = coins - cost
     setCoins(newCoins)
     syncCoinsToSpreadsheet(newCoins, cost)
 
-    // Calculate which pieces will be revealed
-    const remaining = UR_TOTAL_PIECES - urPieceCount
-    const actualDraw = Math.min(drawCount === 1 ? 1 : remaining, remaining)
-    if (actualDraw <= 0) return
-
     // Build the sequence: current+1, current+2, ... current+actualDraw
     const sequence = Array.from({ length: actualDraw }, (_, i) => urPieceCount + i + 1)
+
+    // URピースもカードキーシートに x1〜x25 として記録する。
+    // GASのgetUserはカードキーの x の数でURの進捗を返すため、記録しないと再ログインで0に戻る。
+    // コイン消費と同じタイミングで保存し、演出中にブラウザを閉じても失われないようにする。
+    const pieceIds = sequence.map((n) => `x${n}`)
+    saveCardsToSpreadsheet(pieceIds)
+    saveGachaLog(actualDraw, pieceIds, cost)
     setUrPuzzleQueue(sequence)
     setUrPuzzleQueueIndex(0)
     setPendingGachaCount(actualDraw)
@@ -1023,9 +1030,11 @@ export default function WorldQuestGacha() {
     const newOwnedCount = world.characters.filter((char) => newOwned[char.id]).length
     setWorldCardCounts(prev => ({ ...prev, [rankKey]: newOwnedCount }))
 
-    // コンプ状況をN列に更新（25枚コンプ時のみ）
+    // コンプ状況をN列に更新（25枚コンプ時のみ。GASは枚数を見ずにレア度を書き込むため、ここで絞る）
     const ownedCount = world.characters.filter((char) => newOwned[char.id]).length
-    saveCompletionToSpreadsheet(world.rank, ownedCount)
+    if (ownedCount >= world.characters.length) {
+      saveCompletionToSpreadsheet(world.rank, ownedCount)
+    }
 
     // ガチャログを記録
     saveGachaLog(count, drawnShortIds, count === 1 ? world.cost : world.cost10)
@@ -2408,7 +2417,9 @@ export default function WorldQuestGacha() {
       setUrPieceCount(newPieceCount)
 
       const isComplete = newPieceCount >= UR_TOTAL_PIECES
-      saveCompletionToSpreadsheet("UR", newPieceCount, isComplete)
+      if (isComplete) {
+        saveCompletionToSpreadsheet("UR", newPieceCount, isComplete)
+      }
 
       if (isLastPiece) {
         if (isComplete) {
