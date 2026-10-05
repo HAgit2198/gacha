@@ -23,7 +23,8 @@ async function fetchWithRedirect(url: string, options: RequestInit, maxRedirects
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    const { email, rarity, count } = body
+    const { email: rawEmail, rarity, count } = body
+    const email = String(rawEmail ?? "").trim().toLowerCase()
     // rarity: "N" | "R" | "SR" | "UR" | "EPILOGUE"
     // GASは 顧客マスター N列のコンプ状況を更新する
     // action=saveCompletion, rarity=N/R/SR/UR/EPILOGUE
