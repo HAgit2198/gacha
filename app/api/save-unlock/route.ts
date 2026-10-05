@@ -13,7 +13,7 @@ async function fetchWithRedirect(url: string, options: RequestInit, maxRedirects
       const location = response.headers.get("location")
       if (location) {
         currentUrl = location
-        currentOptions = { redirect: "manual" as RequestRedirect }
+        currentOptions = { redirect: "manual" as RequestRedirect, signal: options.signal }
         continue
       }
     }

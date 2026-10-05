@@ -10,7 +10,7 @@ async function fetchWithRedirect(url: string, options: RequestInit, maxRedirects
       const location = response.headers.get("location")
       if (location) {
         currentUrl = location
-        currentOptions = { redirect: "manual" as RequestRedirect }
+        currentOptions = { redirect: "manual" as RequestRedirect, signal: options.signal }
         continue
       }
     }
@@ -57,10 +57,11 @@ export async function POST(request: NextRequest) {
         clearTimeout(timeoutId)
       }
 
-      // 合計25秒を超えそうなら再試行しない
+      // 次の試行（待ち時間＋最大15秒）で合計25秒を超えるなら再試行しない
       if (data === null && attempt < MAX_ATTEMPTS) {
-        if (Date.now() - startedAt > 25000) break
-        await new Promise((resolve) => setTimeout(resolve, 500 * attempt))
+        const backoff = 500 * attempt
+        if (Date.now() - startedAt + backoff + 15000 > 25000) break
+        await new Promise((resolve) => setTimeout(resolve, backoff))
       }
     }
 
