@@ -29,28 +29,43 @@ export async function POST(request: NextRequest) {
       email: normalizedEmail,
     })
 
-    const controller = new AbortController()
-    const timeoutId = setTimeout(() => controller.abort(), 15000)
+    // GASは起動直後などに一時的にHTMLエラーを返すことがあるため、読み取り専用のgetUserは再試行する
+    const MAX_ATTEMPTS = 3
+    const startedAt = Date.now()
+    let data: Record<string, unknown> | null = null
+    let lastError = "GASへの接続に失敗しました"
 
-    let data: Record<string, unknown>
-    try {
-      const response = await fetchWithRedirect(`${APPS_SCRIPT_URL}?${params.toString()}`, {
-        method: "GET",
-        signal: controller.signal,
-      })
-      clearTimeout(timeoutId)
-
-      const text = await response.text()
+    for (let attempt = 1; attempt <= MAX_ATTEMPTS && data === null; attempt++) {
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => controller.abort(), 15000)
       try {
-        data = JSON.parse(text)
-      } catch {
-        console.error("[v0] GAS returned non-JSON:", text.slice(0, 200))
-        return NextResponse.json({ exists: false, error: "GASからの応答が不正です" }, { status: 500 })
+        const response = await fetchWithRedirect(`${APPS_SCRIPT_URL}?${params.toString()}`, {
+          method: "GET",
+          signal: controller.signal,
+        })
+        const text = await response.text()
+        try {
+          data = JSON.parse(text)
+        } catch {
+          console.error(`[v0] GAS returned non-JSON (attempt ${attempt}):`, text.slice(0, 200))
+          lastError = "GASからの応答が不正です"
+        }
+      } catch (err) {
+        console.error(`[v0] GAS fetch error (attempt ${attempt}):`, err)
+        lastError = "GASへの接続に失敗しました"
+      } finally {
+        clearTimeout(timeoutId)
       }
-    } catch (err) {
-      clearTimeout(timeoutId)
-      console.error("[v0] GAS fetch error:", err)
-      return NextResponse.json({ exists: false, error: "GASへの接続に失敗しました" }, { status: 500 })
+
+      // 合計25秒を超えそうなら再試行しない
+      if (data === null && attempt < MAX_ATTEMPTS) {
+        if (Date.now() - startedAt > 25000) break
+        await new Promise((resolve) => setTimeout(resolve, 500 * attempt))
+      }
+    }
+
+    if (data === null) {
+      return NextResponse.json({ exists: false, error: lastError }, { status: 500 })
     }
 
     if (!data.exists) {
