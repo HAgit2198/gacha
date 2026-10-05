@@ -38,9 +38,9 @@ export default function RootLayout({
     <html lang="ja" className={`${notoSansJP.className} ${cinzelDecorative.variable}`}>
       <head>
         {/* 重い背景画像をブラウザに最優先で先読みさせる */}
-        <link rel="preload" href="/loading-bg-new.png" as="image" />
-        <link rel="preload" href="/gacha-bg.png" as="image" />
-        <link rel="preload" href="/quest-alpha-logo.png" as="image" />
+        <link rel="preload" href="/loading-bg-new.webp" as="image" />
+        <link rel="preload" href="/gacha-bg.webp" as="image" />
+        <link rel="preload" href="/quest-alpha-logo.webp" as="image" />
       </head>
       <body className="font-sans antialiased">
         {children}

@@ -38,158 +38,158 @@ const WORLDS = {
     },
     message: "🌿 生命の起源を征服！新しい世界が開けた！",
     description: "生命の誕生と旅立ち。風・森・火の始まりの地。",
-    buttonImage: "/images/world-btn-origins.png",
+    buttonImage: "/images/world-btn-origins.webp",
     characters: [
       {
         id: "origins_1",
         name: "出発前のルナ",
         element: "風",
-        image: "/images/6.png",
+        image: "/images/6.webp",
       },
       {
         id: "origins_2",
         name: "感情の光ールナー",
         element: "風",
-        image: "/images/7.png",
+        image: "/images/7.webp",
       },
       {
         id: "origins_3",
         name: "風の約束ールナ&リーフー",
         element: "風",
-        image: "/images/8.png",
+        image: "/images/8.webp",
       },
       {
         id: "origins_4",
         name: "世代を超えた絆ールナ&エルダー",
         element: "森",
-        image: "/images/9.png",
+        image: "/images/9.webp",
       },
       {
         id: "origins_5",
         name: "支える炎ールナ&フレアー",
         element: "火",
-        image: "/images/10.png",
+        image: "/images/10.webp",
       },
       {
         id: "origins_6",
         name: "空への挑戦ーカイトー",
         element: "風",
-        image: "/images/11.png",
+        image: "/images/11.webp",
       },
       {
         id: "origins_7",
         name: "未踏の航路ーカイトー",
         element: "風",
-        image: "/images/12.png",
+        image: "/images/12.webp",
       },
       {
         id: "origins_8",
         name: "空を学ぶ日ーカイト&リーフー",
         element: "風",
-        image: "/images/13.png",
+        image: "/images/13.webp",
       },
       {
         id: "origins_9",
         name: "知恵と継承ーカイト&エルダー",
         element: "森",
-        image: "/images/14.png",
+        image: "/images/14.webp",
       },
       {
         id: "origins_10",
         name: "熱き心の交差ーカイト&フレアー",
         element: "火",
-        image: "/images/15.png",
+        image: "/images/15.webp",
       },
 
       {
         id: "origins_11",
         name: "朝風からの導きーリーフー",
         element: "風",
-        image: "/images/16.png",
+        image: "/images/16.webp",
       },
       {
         id: "origins_12",
         name: "風精の便りーリーフー",
         element: "風",
-        image: "/images/17.png",
+        image: "/images/17.webp",
       },
       {
         id: "origins_13",
         name: "風と遊ぶ子供たちーリーフー",
         element: "風",
-        image: "/images/18.png",
+        image: "/images/18.webp",
       },
       {
         id: "origins_14",
         name: "孤独な夜風の想いーリーフー",
         element: "風",
-        image: "/images/19.png",
+        image: "/images/19.webp",
       },
       {
         id: "origins_15",
         name: "新しい風からの贈り物ーリーフー",
         element: "風",
-        image: "/images/20.png",
+        image: "/images/20.webp",
       },
       {
         id: "origins_16",
         name: "森林の賢者ーエルダー",
         element: "森",
-        image: "/images/21.png",
+        image: "/images/21.webp",
       },
       {
         id: "origins_17",
         name: "森の友との安らぎーエルダー",
         element: "森",
-        image: "/images/22.png",
+        image: "/images/22.webp",
       },
       {
         id: "origins_18",
         name: "木々との調和ーエルダー",
         element: "森",
-        image: "/images/23.png",
+        image: "/images/23.webp",
       },
       {
         id: "origins_19",
         name: "父の愛の花ーエルダー",
         element: "森",
-        image: "/images/24.png",
+        image: "/images/24.webp",
       },
       {
         id: "origins_20",
         name: "親愛なる贈り物ーエルダー",
         element: "森",
-        image: "/images/25.png",
+        image: "/images/25.webp",
       },
       {
         id: "origins_21",
         name: "炎の朝景色ーフレアー",
         element: "火",
-        image: "/images/26.png",
+        image: "/images/26.webp",
       },
       {
         id: "origins_22",
         name: "温かく灯す知恵ーフレアー",
         element: "火",
-        image: "/images/27.png",
+        image: "/images/27.webp",
       },
       {
         id: "origins_23",
         name: "日常の中の炎精ーフレアー",
         element: "火",
-        image: "/images/28.png",
+        image: "/images/28.webp",
       },
       {
         id: "origins_24",
         name: "夕焼けの独炎舞ーフレアー",
         element: "火",
-        image: "/images/29.png",
+        image: "/images/29.webp",
       },
       {
         id: "origins_25",
         name: "静寂の炎精ーフレアー",
         element: "火",
-        image: "/images/30.png",
+        image: "/images/30.webp",
       },
     ],
   },
@@ -210,34 +210,34 @@ const WORLDS = {
       text: "text-cyan-300",
       glow: "shadow-cyan-400/50",
     },
-    buttonImage: "/images/world-btn-elements.png",
+    buttonImage: "/images/world-btn-elements.webp",
     description: "自然と文明の調和。水・土・雷の創造の地。",
     characters: [
-      { id: "elements_1", name: "空の上の日常 ルナ・フォルティス", element: "風", image: "/cards/31.png" },
-      { id: "elements_2", name: "冒険の幕開け ルナ&カイト", element: "風", image: "/cards/32.png" },
-      { id: "elements_3", name: "水鏡の真実 ルナ&ミラージュ", element: "水", image: "/cards/33.png" },
-      { id: "elements_4", name: "煌めく贈り物 ルナ&ジェム", element: "土", image: "/cards/34.png" },
-      { id: "elements_5", name: "背中合わせの勇気 ルナ&ボルト", element: "雷", image: "/cards/35.png" },
-      { id: "elements_6", name: "遠き地平を望む者 カイト・ベルウィンド", element: "風", image: "/cards/36.png" },
-      { id: "elements_7", name: "夕映えの想い カイト・ベルウィンド", element: "風", image: "/cards/37.png" },
-      { id: "elements_8", name: "水鏡が映す心 カイト&ミラージュ", element: "水", image: "/cards/38.png" },
-      { id: "elements_9", name: "誇りの交差 カイト&ジェム", element: "土", image: "/cards/39.png" },
-      { id: "elements_10", name: "雷雲を越えて カイト&ボルト", element: "雷", image: "/cards/40.png" },
-      { id: "elements_11", name: "湖面の神秘 水鏡の精霊ミラージュ", element: "水", image: "/cards/41.png" },
-      { id: "elements_12", name: "創造の水流 水鏡の精霊ミラージュ", element: "水", image: "/cards/42.png" },
-      { id: "elements_13", name: "神聖なる水鏡 水鏡の精霊ミラージュ", element: "水", image: "/cards/43.png" },
-      { id: "elements_14", name: "咲き誇る水晶花 水鏡の精霊ミラージュ", element: "水", image: "/cards/44.png" },
-      { id: "elements_15", name: "月夜の静寂 水鏡の精霊ミラージュ", element: "水", image: "/cards/45.png" },
-      { id: "elements_16", name: "光を磨く者 大地の精霊ジェム", element: "土", image: "/cards/46.png" },
-      { id: "elements_17", name: "輝きの誇り 大地の精霊ジェム", element: "土", image: "/cards/47.png" },
-      { id: "elements_18", name: "煌びやかな地図 大地の精霊ジェム", element: "土", image: "/cards/48.png" },
-      { id: "elements_19", name: "輝く目の少年 大地の精霊ジェム", element: "土", image: "/cards/49.png" },
-      { id: "elements_20", name: "創作の光 大地の精霊ジェム", element: "土", image: "/cards/50.png" },
-      { id: "elements_21", name: "稲妻の騎手 雷鳴の精霊ボルト", element: "雷", image: "/cards/51.png" },
-      { id: "elements_22", name: "相棒への慈しみ 雷鳴の精霊ボルト", element: "雷", image: "/cards/52.png" },
-      { id: "elements_23", name: "責任の荷物 雷鳴の精霊ボルト", element: "雷", image: "/cards/53.png" },
-      { id: "elements_24", name: "休息の笑顔 雷鳴の精霊ボルト", element: "雷", image: "/cards/54.png" },
-      { id: "elements_25", name: "雷の試練 雷鳴の精霊ボルト", element: "雷", image: "/cards/55.png" },
+      { id: "elements_1", name: "空の上の日常 ルナ・フォルティス", element: "風", image: "/cards/31.webp" },
+      { id: "elements_2", name: "冒険の幕開け ルナ&カイト", element: "風", image: "/cards/32.webp" },
+      { id: "elements_3", name: "水鏡の真実 ルナ&ミラージュ", element: "水", image: "/cards/33.webp" },
+      { id: "elements_4", name: "煌めく贈り物 ルナ&ジェム", element: "土", image: "/cards/34.webp" },
+      { id: "elements_5", name: "背中合わせの勇気 ルナ&ボルト", element: "雷", image: "/cards/35.webp" },
+      { id: "elements_6", name: "遠き地平を望む者 カイト・ベルウィンド", element: "風", image: "/cards/36.webp" },
+      { id: "elements_7", name: "夕映えの想い カイト・ベルウィンド", element: "風", image: "/cards/37.webp" },
+      { id: "elements_8", name: "水鏡が映す心 カイト&ミラージュ", element: "水", image: "/cards/38.webp" },
+      { id: "elements_9", name: "誇りの交差 カイト&ジェム", element: "土", image: "/cards/39.webp" },
+      { id: "elements_10", name: "雷雲を越えて カイト&ボルト", element: "雷", image: "/cards/40.webp" },
+      { id: "elements_11", name: "湖面の神秘 水鏡の精霊ミラージュ", element: "水", image: "/cards/41.webp" },
+      { id: "elements_12", name: "創造の水流 水鏡の精霊ミラージュ", element: "水", image: "/cards/42.webp" },
+      { id: "elements_13", name: "神聖なる水鏡 水鏡の精霊ミラージュ", element: "水", image: "/cards/43.webp" },
+      { id: "elements_14", name: "咲き誇る水晶花 水鏡の精霊ミラージュ", element: "水", image: "/cards/44.webp" },
+      { id: "elements_15", name: "月夜の静寂 水鏡の精霊ミラージュ", element: "水", image: "/cards/45.webp" },
+      { id: "elements_16", name: "光を磨く者 大地の精霊ジェム", element: "土", image: "/cards/46.webp" },
+      { id: "elements_17", name: "輝きの誇り 大地の精霊ジェム", element: "土", image: "/cards/47.webp" },
+      { id: "elements_18", name: "煌びやかな地図 大地の精霊ジェム", element: "土", image: "/cards/48.webp" },
+      { id: "elements_19", name: "輝く目の少年 大地の精霊ジェム", element: "土", image: "/cards/49.webp" },
+      { id: "elements_20", name: "創作の光 大地の精霊ジェム", element: "土", image: "/cards/50.webp" },
+      { id: "elements_21", name: "稲妻の騎手 雷鳴の精霊ボルト", element: "雷", image: "/cards/51.webp" },
+      { id: "elements_22", name: "相棒への慈しみ 雷鳴の精霊ボルト", element: "雷", image: "/cards/52.webp" },
+      { id: "elements_23", name: "責任の荷物 雷鳴の精霊ボルト", element: "雷", image: "/cards/53.webp" },
+      { id: "elements_24", name: "休息の笑顔 雷鳴の精霊ボルト", element: "雷", image: "/cards/54.webp" },
+      { id: "elements_25", name: "雷の試練 雷鳴の精霊ボルト", element: "雷", image: "/cards/55.webp" },
     ],
   },
   beyond: {
@@ -258,34 +258,34 @@ const WORLDS = {
       glow: "shadow-yellow-400/50",
     },
     message: "🌌 彼方の次元を達成！現実の繊維が揺さぶられる！",
-    buttonImage: "/images/world-btn-beyond.png",
+    buttonImage: "/images/world-btn-beyond.webp",
     description: "時空と超常の狭間。時間・闇・光の異界。",
     characters: [
-      { id: "beyond_1", name: "想いの写真 ルナ・フォルティス", element: "光", image: "/cards/57.png" },
-      { id: "beyond_2", name: "海鳴り亭の再建 ルナ・フォルティス", element: "光", image: "/cards/58.png" },
-      { id: "beyond_3", name: "冒険の幕開け ルナ&レム", element: "時間", image: "/cards/59.png" },
-      { id: "beyond_4", name: "影との対話 ルナ&シェイド", element: "闇", image: "/cards/60.png" },
-      { id: "beyond_5", name: "虹色の約束 ルナ&ユメ", element: "光", image: "/cards/61.png" },
-      { id: "beyond_6", name: "遠き地平を望む者 カイト・ベルウィンド", element: "風", image: "/cards/62.png" },
-      { id: "beyond_7", name: "共に掲げる軌跡 ルナ&カイト", element: "光", image: "/cards/63.png" },
-      { id: "beyond_8", name: "時の学び カイト&レム", element: "時間", image: "/cards/64.png" },
-      { id: "beyond_9", name: "影からの啓示 カイト&シェイド", element: "闇", image: "/cards/65.png" },
-      { id: "beyond_10", name: "新たな夢の対話 カイト&ユメ", element: "光", image: "/cards/66.png" },
-      { id: "beyond_11", name: "時の司書 時の精霊レム", element: "時間", image: "/cards/67.png" },
-      { id: "beyond_12", name: "時を聴く者 時の精霊レム", element: "時間", image: "/cards/68.png" },
-      { id: "beyond_13", name: "暖炉の語り手 時の精霊レム", element: "時間", image: "/cards/69.png" },
-      { id: "beyond_14", name: "黄昏の回想 時の精霊レム", element: "時間", image: "/cards/70.png" },
-      { id: "beyond_15", name: "記憶の記録者 時の精霊レム", element: "時間", image: "/cards/71.png" },
-      { id: "beyond_16", name: "闇に沈む者 影の精霊シェイド", element: "闇", image: "/cards/72.png" },
-      { id: "beyond_17", name: "闇が紡ぐ笑顔 影の精霊シェイド", element: "闇", image: "/cards/73.png" },
-      { id: "beyond_18", name: "影の観察者 影の精霊シェイド", element: "闇", image: "/cards/74.png" },
-      { id: "beyond_19", name: "思索の闇 影の精霊シェイド", element: "闇", image: "/cards/75.png" },
-      { id: "beyond_20", name: "捨てられた光 影の精霊シェイド", element: "闇", image: "/cards/76.png" },
-      { id: "beyond_21", name: "夢を紡ぐ者 夢幻の精霊ユメ", element: "光", image: "/cards/77.png" },
-      { id: "beyond_22", name: "形にする奇跡 夢幻の精霊ユメ", element: "光", image: "/cards/78.png" },
-      { id: "beyond_23", name: "華やぐ装飾 夢幻の精霊ユメ", element: "光", image: "/cards/79.png" },
-      { id: "beyond_24", name: "微笑みの受容 夢幻の精霊ユメ", element: "光", image: "/cards/80.png" },
-      { id: "beyond_25", name: "星空の夢語り 夢幻の精霊ユメ", element: "光", image: "/cards/81.png" },
+      { id: "beyond_1", name: "想いの写真 ルナ・フォルティス", element: "光", image: "/cards/57.webp" },
+      { id: "beyond_2", name: "海鳴り亭の再建 ルナ・フォルティス", element: "光", image: "/cards/58.webp" },
+      { id: "beyond_3", name: "冒険の幕開け ルナ&レム", element: "時間", image: "/cards/59.webp" },
+      { id: "beyond_4", name: "影との対話 ルナ&シェイド", element: "闇", image: "/cards/60.webp" },
+      { id: "beyond_5", name: "虹色の約束 ルナ&ユメ", element: "光", image: "/cards/61.webp" },
+      { id: "beyond_6", name: "遠き地平を望む者 カイト・ベルウィンド", element: "風", image: "/cards/62.webp" },
+      { id: "beyond_7", name: "共に掲げる軌跡 ルナ&カイト", element: "光", image: "/cards/63.webp" },
+      { id: "beyond_8", name: "時の学び カイト&レム", element: "時間", image: "/cards/64.webp" },
+      { id: "beyond_9", name: "影からの啓示 カイト&シェイド", element: "闇", image: "/cards/65.webp" },
+      { id: "beyond_10", name: "新たな夢の対話 カイト&ユメ", element: "光", image: "/cards/66.webp" },
+      { id: "beyond_11", name: "時の司書 時の精霊レム", element: "時間", image: "/cards/67.webp" },
+      { id: "beyond_12", name: "時を聴く者 時の精霊レム", element: "時間", image: "/cards/68.webp" },
+      { id: "beyond_13", name: "暖炉の語り手 時の精霊レム", element: "時間", image: "/cards/69.webp" },
+      { id: "beyond_14", name: "黄昏の回想 時の精霊レム", element: "時間", image: "/cards/70.webp" },
+      { id: "beyond_15", name: "記憶の記録者 時の精霊レム", element: "時間", image: "/cards/71.webp" },
+      { id: "beyond_16", name: "闇に沈む者 影の精霊シェイド", element: "闇", image: "/cards/72.webp" },
+      { id: "beyond_17", name: "闇が紡ぐ笑顔 影の精霊シェイド", element: "闇", image: "/cards/73.webp" },
+      { id: "beyond_18", name: "影の観察者 影の精霊シェイド", element: "闇", image: "/cards/74.webp" },
+      { id: "beyond_19", name: "思索の闇 影の精霊シェイド", element: "闇", image: "/cards/75.webp" },
+      { id: "beyond_20", name: "捨てられた光 影の精霊シェイド", element: "闇", image: "/cards/76.webp" },
+      { id: "beyond_21", name: "夢を紡ぐ者 夢幻の精霊ユメ", element: "光", image: "/cards/77.webp" },
+      { id: "beyond_22", name: "形にする奇跡 夢幻の精霊ユメ", element: "光", image: "/cards/78.webp" },
+      { id: "beyond_23", name: "華やぐ装飾 夢幻の精霊ユメ", element: "光", image: "/cards/79.webp" },
+      { id: "beyond_24", name: "微笑みの受容 夢幻の精霊ユメ", element: "光", image: "/cards/80.webp" },
+      { id: "beyond_25", name: "星空の夢語り 夢幻の精霊ユメ", element: "光", image: "/cards/81.webp" },
     ],
   },
   questpia: {
@@ -306,7 +306,7 @@ const WORLDS = {
       glow: "shadow-orange-400/50",
     },
     message: "🌈クエストピアが現れた！伝説が動き出す！",
-    buttonImage: "/images/world-btn-questpia.png",
+    buttonImage: "/images/world-btn-questpia.webp",
     description: "究極の調和と伝説の終焉。全ての元素が融合した世界。",
     characters: [
       { id: "questpia_1",  name: "裏面 リーフ",       element: "全", image: "/cards/ur/back_1.png" },
@@ -411,15 +411,15 @@ export default function WorldQuestGacha() {
   const UR_TOTAL_PIECES = 25
   const UR_PHASE1_LIMIT = 10 // single draws only for first 10
   // Map piece index 0..25 to collection image: 95=empty, 96=piece1 ... 120=complete
-  const getUrPuzzleImage = (count: number) => `/cards/ur/${95 + Math.min(count, UR_TOTAL_PIECES)}.png`
+  const getUrPuzzleImage = (count: number) => `/cards/ur/${95 + Math.min(count, UR_TOTAL_PIECES)}.webp`
   // Result reveal image for draw N (1-indexed):
-  //   Draws  1-11: triangle piece images  84.png ... 94.png
-  //   Draws 12-25: full character images  /cards/ur/char/95.png ... 108.png
+  //   Draws  1-11: triangle piece images  84.webp ... 94.webp
+  //   Draws 12-25: full character images  /cards/ur/char/95.webp ... 108.webp
   const getUrResultImage = (pieceCount: number): { src: string; isCharacter: boolean } | null => {
     if (pieceCount >= 1 && pieceCount <= 11)
-      return { src: `/cards/ur/${83 + pieceCount}.png`, isCharacter: false }
+      return { src: `/cards/ur/${83 + pieceCount}.webp`, isCharacter: false }
     if (pieceCount >= 12 && pieceCount <= 25)
-      return { src: `/cards/ur/char/${83 + pieceCount}.png`, isCharacter: true }
+      return { src: `/cards/ur/char/${83 + pieceCount}.webp`, isCharacter: true }
     return null
   }
   const videoContainerRef = useRef<HTMLDivElement>(null)
@@ -591,6 +591,15 @@ export default function WorldQuestGacha() {
       const fallbackTimer = setTimeout(() => {
         processGachaResults()
       }, 90 * 1000)
+      // 回線が遅く動画が12秒以内に再生開始しない場合は、待たせずに結果へ進む
+      let playbackStarted = false
+      const startTimeoutTimer = setTimeout(() => {
+        if (playbackStarted) return
+        clearTimeout(fallbackTimer)
+        try { playerRef.current?.destroy() } catch {}
+        playerRef.current = null
+        processGachaResults()
+      }, 12 * 1000)
 
       const startPlayer = () => {
         if (!videoContainerRef.current) return
@@ -638,9 +647,15 @@ export default function WorldQuestGacha() {
           player.play().catch(() => {})
         })
 
+        player.on("play", () => {
+          playbackStarted = true
+          clearTimeout(startTimeoutTimer)
+        })
+
         // ended で確実に終了
         player.on("ended", () => {
           clearTimeout(fallbackTimer)
+          clearTimeout(startTimeoutTimer)
           try { player.destroy() } catch {}
           playerRef.current = null
           processGachaResults()
@@ -659,7 +674,10 @@ export default function WorldQuestGacha() {
         document.head.appendChild(script)
       }
 
-      return () => clearTimeout(fallbackTimer)
+      return () => {
+        clearTimeout(fallbackTimer)
+        clearTimeout(startTimeoutTimer)
+      }
     }
 
     return () => {
@@ -714,11 +732,11 @@ export default function WorldQuestGacha() {
 
   const getButtonImages = (rank: string) => {
     switch (rank.toUpperCase()) {
-      case "N":  return { single: "/gacha-button-n-1x.png",  multi: "/gacha-button-n-10x.png"  } // エリア1: 20 / 180
-      case "R":  return { single: "/gacha-button-r-1x.png",  multi: "/gacha-button-r-10x.png"  } // エリア2: 30 / 270
-      case "SR": return { single: "/gacha-button-sr-1x.png", multi: "/gacha-button-sr-10x.png" } // エリア3: 50 / 450
-      case "UR": return { single: "/gacha-button-ur-1x.png", multi: null }                        // エリア4: 100のみ（単発のみ）
-      default:   return { single: "/gacha-button-n-1x.png",  multi: "/gacha-button-n-10x.png"  }
+      case "N":  return { single: "/gacha-button-n-1x.webp",  multi: "/gacha-button-n-10x.webp"  } // エリア1: 20 / 180
+      case "R":  return { single: "/gacha-button-r-1x.webp",  multi: "/gacha-button-r-10x.webp"  } // エリア2: 30 / 270
+      case "SR": return { single: "/gacha-button-sr-1x.webp", multi: "/gacha-button-sr-10x.webp" } // エリア3: 50 / 450
+      case "UR": return { single: "/gacha-button-ur-1x.webp", multi: null }                        // エリア4: 100のみ（単発のみ）
+      default:   return { single: "/gacha-button-n-1x.webp",  multi: "/gacha-button-n-10x.webp"  }
     }
   }
 
@@ -830,16 +848,16 @@ export default function WorldQuestGacha() {
     // Phase1: ボタン・ロゴ・ロック画像のみ（小サイズ・すぐ終わる）
     // gacha-bg / loading-bg-new / quest-alpha-logo はlayout.tsxの<link rel="preload">で先読み済み
     const phase1Images = [
-      "/gacha-button-n-1x.png",
-      "/gacha-button-n-10x.png",
-      "/gacha-button-r-1x.png",
-      "/gacha-button-r-10x.png",
-      "/gacha-button-sr-1x.png",
-      "/gacha-button-sr-10x.png",
-      "/images/world-btn-origins.png",
-      "/lock-button-r.png",
-      "/lock-button-sr.png",
-      "/lock-button-ur.png",
+      "/gacha-button-n-1x.webp",
+      "/gacha-button-n-10x.webp",
+      "/gacha-button-r-1x.webp",
+      "/gacha-button-r-10x.webp",
+      "/gacha-button-sr-1x.webp",
+      "/gacha-button-sr-10x.webp",
+      "/images/world-btn-origins.webp",
+      "/lock-button-r.webp",
+      "/lock-button-sr.webp",
+      "/lock-button-ur.webp",
     ]
 
     // Phase2: カード画像（遷移後バックグラウンドで読み込む）
@@ -1368,7 +1386,7 @@ export default function WorldQuestGacha() {
         {/* Background - fantasy landscape */}
         <div className="absolute inset-0" style={{ animation: "openingBgReveal 3s ease-out forwards" }}>
           <img
-            src="/sky-islands-background.png"
+            src="/sky-islands-background.webp"
             alt="Opening"
             className="w-full h-full object-cover"
             style={{ animation: "openingZoom 3.5s ease-out forwards" }}
@@ -1379,7 +1397,7 @@ export default function WorldQuestGacha() {
         {/* Logo - main focus */}
         <div className="relative z-10 flex flex-col items-center" style={{ animation: "openingLogoReveal 2s ease-out 0.5s forwards", opacity: 0 }}>
           <img
-            src="/quest-alpha-logo.png"
+            src="/quest-alpha-logo.webp"
             alt="Quest+α"
             className="w-[500px] max-w-[90vw] drop-shadow-[0_0_40px_rgba(255,255,255,0.3)]"
           />
@@ -1402,7 +1420,7 @@ export default function WorldQuestGacha() {
       <div className="min-h-screen flex items-center justify-center relative overflow-hidden" style={{ animation: "screenFadeIn 0.8s ease-out forwards" }}>
         {/* Background */}
         <div className="absolute inset-0">
-          <img src="/login-bg.png" alt="Background" className="w-full h-full object-cover" />
+          <img src="/login-bg.webp" alt="Background" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-black/30" />
         </div>
 
@@ -1454,12 +1472,12 @@ export default function WorldQuestGacha() {
           <div className="fixed inset-0 z-50 flex flex-col items-center justify-center" style={{ animation: "screenFadeIn 0.3s ease-out forwards" }}>
             {/* Background */}
             <div className="absolute inset-0">
-              <img src="/loading-bg-new.png" alt="" className="w-full h-full object-cover" />
+              <img src="/loading-bg-new.webp" alt="" className="w-full h-full object-cover" />
               <div className="absolute inset-0 bg-black/40" />
             </div>
             {/* Logo + progress */}
             <div className="relative z-10 flex flex-col items-center gap-6">
-              <img src="/quest-alpha-logo.png" alt="Quest+α" className="w-72 max-w-[80vw] drop-shadow-[0_0_30px_rgba(255,255,255,0.25)]" style={{ animation: "loadingPulse 2s ease-in-out infinite" }} />
+              <img src="/quest-alpha-logo.webp" alt="Quest+α" className="w-72 max-w-[80vw] drop-shadow-[0_0_30px_rgba(255,255,255,0.25)]" style={{ animation: "loadingPulse 2s ease-in-out infinite" }} />
               <div className="flex flex-col items-center gap-3 w-56">
                 {/* プログレスバー */}
                 <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
@@ -1495,7 +1513,7 @@ export default function WorldQuestGacha() {
       <div className="min-h-screen relative overflow-hidden flex flex-col bg-blue-950" style={{ animation: "gachaScreenEnter 0.6s ease-out forwards" }}>
         {/* 背景イメージ */}
         <div className="absolute inset-0">
-          <img src="/gacha-bg.png" alt="Gacha Background" className="w-full h-full object-contain" />
+          <img src="/gacha-bg.webp" alt="Gacha Background" className="w-full h-full object-contain" />
           <div className="absolute inset-0 bg-blue-950/60" />
         </div>
 
@@ -1613,10 +1631,10 @@ export default function WorldQuestGacha() {
           const canGacha = canGachaInWorld(worldId)
 
           const lockImage = (() => {
-            if (worldId === "elements") return "/lock-button-r.png"
-            if (worldId === "beyond") return "/lock-button-sr.png"
-            if (worldId === "questpia") return "/lock-button-ur.png"
-            return "/lock-button-r.png"
+            if (worldId === "elements") return "/lock-button-r.webp"
+            if (worldId === "beyond") return "/lock-button-sr.webp"
+            if (worldId === "questpia") return "/lock-button-ur.webp"
+            return "/lock-button-r.webp"
           })()
 
           return (
@@ -2187,7 +2205,7 @@ export default function WorldQuestGacha() {
             <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
               {/* Background */}
               <div className="absolute inset-0">
-                <img src="/loading-bg-new.png" alt="" className="w-full h-full object-cover" />
+                <img src="/loading-bg-new.webp" alt="" className="w-full h-full object-cover" />
                 <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
               </div>
 
@@ -2340,7 +2358,7 @@ export default function WorldQuestGacha() {
         }}
       >
         <div className="absolute inset-0">
-          <img src="/gacha-bg.png" alt="" className="w-full h-full object-cover" />
+          <img src="/gacha-bg.webp" alt="" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-black/50" />
         </div>
 
@@ -2493,7 +2511,7 @@ export default function WorldQuestGacha() {
         )}
         {/* Background */}
         <div className="absolute inset-0">
-          <img src="/gacha-bg.png" alt="" className="w-full h-full object-cover opacity-20" />
+          <img src="/gacha-bg.webp" alt="" className="w-full h-full object-cover opacity-20" />
           <div className={`absolute inset-0 ${isCharacterReveal ? "bg-black/40" : "bg-black/60"}`} />
         </div>
 
@@ -2654,7 +2672,7 @@ export default function WorldQuestGacha() {
     return (
       <div className="min-h-screen relative overflow-hidden flex items-center justify-center p-4">
         <div className="absolute inset-0">
-          <img src="/gacha-bg.png" alt="" className="w-full h-full object-cover" />
+          <img src="/gacha-bg.webp" alt="" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-black/40" />
         </div>
 
@@ -2803,7 +2821,7 @@ export default function WorldQuestGacha() {
           <div className="relative flex flex-col items-center gap-8 w-72 max-w-[85vw]">
             {/* ロゴ */}
             <img
-              src="/quest-alpha-logo.png"
+              src="/quest-alpha-logo.webp"
               alt="Quest+α"
               className="w-44 max-w-[60vw] object-contain"
               style={{ filter: "drop-shadow(0 0 16px rgba(96,165,250,0.4))", animation: "loadingPulse 2.5s ease-in-out infinite" }}
