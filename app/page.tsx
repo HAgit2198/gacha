@@ -487,7 +487,7 @@ export default function WorldQuestGacha() {
               // epilogue はlocalStorageが true なら維持（スプレッドシートが未対応でも）
               epilogue: data.sheetWorldUnlocks.epilogue || prev.epilogue,
             }))
-            setEmail(storedEmail)
+            setEmail(String(storedEmail).trim().toLowerCase())
             setUserName(storedUserName)
             setScreen("gacha")
             // セッション復元時もプリロードしないとコレクション画面がローディングのまま進まない
@@ -1028,7 +1028,7 @@ export default function WorldQuestGacha() {
     saveCompletionToSpreadsheet(world.rank, ownedCount)
 
     // ガチャログを記録
-    saveGachaLog(count, drawnShortIds)
+    saveGachaLog(count, drawnShortIds, count === 1 ? world.cost : world.cost10)
 
     setTimeout(() => {
       const wasCompleteBeforeDraw = world.characters.every((char) => ownedCharacters[char.id])
@@ -1159,6 +1159,8 @@ export default function WorldQuestGacha() {
       }
 
       if (data.exists) {
+        // 以降の書き込み（コイン・カード・ログ）がシートの行と一致するよう正規化して保持
+        setEmail(email.trim().toLowerCase())
         setUserName(data.name)
         setCoins(data.coins)
 
@@ -1295,11 +1297,10 @@ export default function WorldQuestGacha() {
     }
   }
 
-  const saveGachaLog = async (gachaCount: number, drawnCardIds: string[]) => {
+  const saveGachaLog = async (gachaCount: number, drawnCardIds: string[], spentCoins: number) => {
     if (!email) return
     if (email.toLowerCase() === DEMO_EMAIL || email.toLowerCase() === DEMO2_EMAIL) return
     try {
-      const spentCoins = gachaCount === 1 ? 100 : 1000 // 1回100コイン、10回1000コイン
       await fetch("/api/save-gacha-log", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

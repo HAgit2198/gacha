@@ -19,7 +19,8 @@ function convertCardId(cardId: string): string {
 
 export async function POST(request: NextRequest) {
   try {
-    const { email, name, gachaCount, drawnCards, consumedCoins } = await request.json()
+    const { email: rawEmail, name, gachaCount, drawnCards, consumedCoins } = await request.json()
+    const email = String(rawEmail ?? "").trim().toLowerCase()
 
     if (!email || !drawnCards) {
       return NextResponse.json({ success: true })

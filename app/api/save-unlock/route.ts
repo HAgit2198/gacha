@@ -29,7 +29,8 @@ async function fetchWithRedirect(url: string, options: RequestInit, maxRedirects
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    const { email, rarity } = body
+    const { email: rawEmail, rarity } = body
+    const email = String(rawEmail ?? "").trim().toLowerCase()
     // rarity: "N" | "R" | "SR" | "SSR"
     // save-completion と同じアクションを使い、count として特別値 -1 を送る
     // GAS 側で -1 を受け取った場合「開放」と書き込む

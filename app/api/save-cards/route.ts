@@ -23,7 +23,8 @@ async function fetchWithRedirect(url: string, options: RequestInit, maxRedirects
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    const { email, drawnCards } = body
+    const { email: rawEmail, drawnCards } = body
+    const email = String(rawEmail ?? "").trim().toLowerCase()
     // drawnCards: 今回引いたカードIDの配列（重複あり）
     // カードキーシートのB列に追記（既存値に追加）
     const cardsStr = Array.isArray(drawnCards) ? drawnCards.join(",") : String(drawnCards || "")

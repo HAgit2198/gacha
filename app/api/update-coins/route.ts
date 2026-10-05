@@ -21,7 +21,8 @@ async function fetchWithRedirect(url: string, options: RequestInit, maxRedirects
 
 export async function POST(request: Request) {
   try {
-    const { email, spent } = await request.json()
+    const { email: rawEmail, spent } = await request.json()
+    const email = String(rawEmail ?? "").trim().toLowerCase()
 
     // 新構造：コイン獲得シートのF列（ガチャ使用）に消費枚数を追加
     // action=spendCoins で GAS側が該当メールのF列に spent を加算
