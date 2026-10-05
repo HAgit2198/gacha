@@ -591,15 +591,6 @@ export default function WorldQuestGacha() {
       const fallbackTimer = setTimeout(() => {
         processGachaResults()
       }, 90 * 1000)
-      // 回線が遅く動画が12秒以内に再生開始しない場合は、待たせずに結果へ進む
-      let playbackStarted = false
-      const startTimeoutTimer = setTimeout(() => {
-        if (playbackStarted) return
-        clearTimeout(fallbackTimer)
-        try { playerRef.current?.destroy() } catch {}
-        playerRef.current = null
-        processGachaResults()
-      }, 12 * 1000)
 
       const startPlayer = () => {
         if (!videoContainerRef.current) return
@@ -647,15 +638,9 @@ export default function WorldQuestGacha() {
           player.play().catch(() => {})
         })
 
-        player.on("play", () => {
-          playbackStarted = true
-          clearTimeout(startTimeoutTimer)
-        })
-
         // ended で確実に終了
         player.on("ended", () => {
           clearTimeout(fallbackTimer)
-          clearTimeout(startTimeoutTimer)
           try { player.destroy() } catch {}
           playerRef.current = null
           processGachaResults()
@@ -674,10 +659,7 @@ export default function WorldQuestGacha() {
         document.head.appendChild(script)
       }
 
-      return () => {
-        clearTimeout(fallbackTimer)
-        clearTimeout(startTimeoutTimer)
-      }
+      return () => clearTimeout(fallbackTimer)
     }
 
     return () => {
