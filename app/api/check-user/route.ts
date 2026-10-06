@@ -2,6 +2,13 @@ import { type NextRequest, NextResponse } from "next/server"
 import { APPS_SCRIPT_URL } from "@/lib/apps-script-config"
 import { parseCardKeys } from "@/lib/card-keys"
 
+// GAS は混雑時に応答まで30秒以上かかることがあるため、関数の実行時間に余裕を持たせる
+export const maxDuration = 120
+
+// 1回あたりの待ち時間と、再試行を含めた全体の上限
+const ATTEMPT_TIMEOUT_MS = 40000
+const TOTAL_BUDGET_MS = 100000
+
 // 利用者に表示するエラー文（内部の仕組み名は出さない）
 const USER_ERROR_MESSAGE = "ただいまアクセスが集中しています。もう一度ログインしてください"
 
@@ -41,7 +48,7 @@ export async function POST(request: NextRequest) {
 
     for (let attempt = 1; attempt <= MAX_ATTEMPTS && data === null; attempt++) {
       const controller = new AbortController()
-      const timeoutId = setTimeout(() => controller.abort(), 15000)
+      const timeoutId = setTimeout(() => controller.abort(), ATTEMPT_TIMEOUT_MS)
       try {
         const response = await fetchWithRedirect(`${APPS_SCRIPT_URL}?${params.toString()}`, {
           method: "GET",
@@ -62,10 +69,10 @@ export async function POST(request: NextRequest) {
       }
 
       // GASは起動直後に遅れてエラーページを返すことがあるので、間隔を空けて再試行する。
-      // 次の試行（待ち時間＋最大15秒）で合計45秒を超えるなら再試行しない（関数の上限は5分）
+      // 遅くても成功する応答を途中で打ち切らないよう1回の待ち時間は長めにし、全体で100秒を超えるなら再試行しない
       if (data === null && attempt < MAX_ATTEMPTS) {
         const backoff = 2000 * attempt
-        if (Date.now() - startedAt + backoff + 15000 > 45000) break
+        if (Date.now() - startedAt + backoff + ATTEMPT_TIMEOUT_MS > TOTAL_BUDGET_MS) break
         await new Promise((resolve) => setTimeout(resolve, backoff))
       }
     }
