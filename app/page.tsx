@@ -358,6 +358,31 @@ export default function WorldQuestGacha() {
   const [coins, setCoins] = useState(100000)
   const [loginError, setLoginError] = useState("")
   const [isLoggingIn, setIsLoggingIn] = useState(false)
+  // ログイン中の進捗表示：会員確認 → カード読み込み → 画像準備 → 完了
+  const [loginStage, setLoginStage] = useState<"user" | "cards" | "images" | "done">("user")
+  const [loginProgress, setLoginProgress] = useState(0)
+  const [loginSlow, setLoginSlow] = useState(false)
+
+  // 各段階の上限に向けてバーを少しずつ進める（実際の通信が終わるまで100%にしない）
+  useEffect(() => {
+    if (!isLoggingIn) return
+    const cap = { user: 45, cards: 70, images: 95, done: 100 }[loginStage]
+    if (loginStage === "done") {
+      setLoginProgress(100)
+      return
+    }
+    const floor = { user: 0, cards: 45, images: 70 }[loginStage]
+    setLoginProgress((p) => Math.max(p, floor))
+    setLoginSlow(false)
+    const slowTimer = setTimeout(() => setLoginSlow(true), 5000)
+    const ticker = setInterval(() => {
+      setLoginProgress((p) => Math.max(p, p + (cap - p) * 0.08))
+    }, 200)
+    return () => {
+      clearTimeout(slowTimer)
+      clearInterval(ticker)
+    }
+  }, [isLoggingIn, loginStage])
   const [unlockedWorlds, setUnlockedWorlds] = useState(["origins"])
   const [ownedCharacters, setOwnedCharacters] = useState<{ [key: string]: boolean }>({})
   const [isDrawing, setIsDrawing] = useState(false)
@@ -1100,14 +1125,36 @@ export default function WorldQuestGacha() {
     ? urPieceCount >= UR_TOTAL_PIECES
     : checkWorldCompletion(currentWorld)
 
+  const LOGIN_STAGE_LABELS = {
+    user: "会員情報を確認しています…",
+    cards: "カードデータを読み込んでいます…",
+    images: "画面を準備しています…",
+    done: "まもなく始まります",
+  } as const
+  const loginDisplayProgress = Math.round(
+    loginStage === "done"
+      ? 100
+      : loginStage === "images"
+        ? Math.max(loginProgress, 70 + preloadProgress * 0.25)
+        : loginProgress,
+  )
+
   const handleEmailLogin = async () => {
     if (!email.trim()) {
       setLoginError("メールアドレスを入力してください")
       return
     }
 
+    setLoginStage("user")
+    setLoginProgress(0)
     setIsLoggingIn(true)
     setLoginError("")
+
+    // 100%を見せてから画面を切り替える
+    const finishLogin = async () => {
+      setLoginStage("done")
+      await new Promise((resolve) => setTimeout(resolve, 300))
+    }
 
     // デモ1：originsのみ解放・GAS連携なし・100万コイン
     if (email.trim().toLowerCase() === DEMO_EMAIL) {
@@ -1121,7 +1168,9 @@ export default function WorldQuestGacha() {
       setWorldCardCounts({ n: 0, r: 0, sr: 0, ur: 0 })
       setUrPieceCount(0)
       setCurrentWorld("origins")
+      setLoginStage("images")
       await preloadAllImages()
+      await finishLogin()
       setScreen("gacha")
       setIsLoggingIn(false)
       return
@@ -1144,13 +1193,27 @@ export default function WorldQuestGacha() {
       setWorldCardCounts({ n: 25, r: 25, sr: 25, ur: 11 })
       setUrPieceCount(11)
       setCurrentWorld("questpia")
+      setLoginStage("images")
       await preloadAllImages()
+      await finishLogin()
       setScreen("gacha")
       setIsLoggingIn(false)
       return
     }
 
     try {
+      // カードデータは会員確認と並行して取得し、待ち時間を短くする
+      const cardsPromise: Promise<any> = fetch("/api/get-cards", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.trim() }),
+      })
+        .then((r) => r.json())
+        .catch((cardsError) => {
+          console.error("[v0] Error loading cards:", cardsError)
+          return null
+        })
+
       const response = await fetch("/api/check-user", {
         method: "POST",
         headers: {
@@ -1188,31 +1251,25 @@ export default function WorldQuestGacha() {
         }
 
         // カードキーシートから所持カードと枚数を取得
-        try {
-          const cardsResponse = await fetch("/api/get-cards", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email: email.trim() }),
-          })
-          const cardsData = await cardsResponse.json()
-          if (cardsData.success) {
-            if (cardsData.ownedCharacters) {
-              setOwnedCharacters(cardsData.ownedCharacters)
-            }
-            if (cardsData.worldCounts) {
-              setWorldCardCounts(cardsData.worldCounts)
-              setUrPieceCount(cardsData.worldCounts.ur ?? 0)
-            }
+        setLoginStage("cards")
+        const cardsData = await cardsPromise
+        if (cardsData?.success) {
+          if (cardsData.ownedCharacters) {
+            setOwnedCharacters(cardsData.ownedCharacters)
           }
-        } catch (cardsError) {
-          console.error("[v0] Error loading cards:", cardsError)
+          if (cardsData.worldCounts) {
+            setWorldCardCounts(cardsData.worldCounts)
+            setUrPieceCount(cardsData.worldCounts.ur ?? 0)
+          }
         }
 
         // GAS通信完了後に画像プリロードを実行（まだ完了していなければここで待つ）
+        setLoginStage("images")
         if (!imagesPreloaded) {
           await preloadAllImages()
         }
 
+        await finishLogin()
         setScreen("gacha")
         // Fetch user stats after successful login
         fetchUserStats()
@@ -1461,20 +1518,26 @@ export default function WorldQuestGacha() {
             <div className="relative z-10 flex flex-col items-center gap-6">
               <img src="/quest-alpha-logo.webp" alt="Quest+α" className="w-72 max-w-[80vw] drop-shadow-[0_0_30px_rgba(255,255,255,0.25)]" style={{ animation: "loadingPulse 2s ease-in-out infinite" }} />
               <div className="flex flex-col items-center gap-3 w-56">
-                {/* プログレスバー */}
+                {/* プログレスバー（会員確認 → カード読み込み → 画像準備 の実際の進み具合） */}
                 <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
                   <div
                     className="h-full rounded-full transition-all duration-300"
                     style={{
-                      width: `${preloadProgress}%`,
+                      width: `${loginDisplayProgress}%`,
                       background: "linear-gradient(90deg, rgba(99,179,237,0.8), rgba(255,255,255,0.9))",
                     }}
                   />
                 </div>
                 <div className="flex items-center justify-between w-full">
                   <p className="text-white/60 text-xs tracking-[0.3em] font-light">NOW LOADING</p>
-                  <p className="text-white/50 text-xs font-mono">{preloadProgress}%</p>
+                  <p className="text-white/50 text-xs font-mono">{loginDisplayProgress}%</p>
                 </div>
+                <p className="text-white/80 text-xs text-center tracking-wider">{LOGIN_STAGE_LABELS[loginStage]}</p>
+                {loginSlow && loginStage !== "done" && (
+                  <p className="text-white/60 text-[11px] text-center leading-relaxed">
+                    通信に時間がかかっています。<br />このままお待ちください
+                  </p>
+                )}
               </div>
             </div>
           </div>
