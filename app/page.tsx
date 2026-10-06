@@ -900,7 +900,9 @@ export default function WorldQuestGacha() {
     ]
 
     // Phase2: カード画像（遷移後バックグラウンドで読み込む）
+    // Vol.4（questpia）はパズル画像で表示するため、characters の画像（実ファイルなし）は読まない
     const phase2Images = Object.values(WORLDS)
+      .filter(w => w.id !== "questpia")
       .flatMap(w => w.characters.map(c => c.image))
       .filter(Boolean)
 
@@ -936,7 +938,7 @@ export default function WorldQuestGacha() {
             setImagesPreloaded(true)
             resolve()
             // Phase2: 現在のワールドを最優先、他ワールドは5枚ずつ遅延ロード
-            const currentWorldImages = (WORLDS[currentWorld as keyof typeof WORLDS]?.characters ?? [])
+            const currentWorldImages = (currentWorld === "questpia" ? [] : WORLDS[currentWorld as keyof typeof WORLDS]?.characters ?? [])
               .map(c => c.image).filter(Boolean)
             const otherImages = phase2Images.filter(src2 => !currentWorldImages.includes(src2))
 
