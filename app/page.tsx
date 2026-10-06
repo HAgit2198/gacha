@@ -341,6 +341,29 @@ const WORLDS = {
 const WORLD_ORDER = ["origins", "elements", "beyond", "questpia"]
 
 // デモアカウント設定（GAS連携なし）
+// ログイン中に流すガチャのミニコラム
+const LOADING_TIPS = [
+  "Vol.1は夢の欠片20個で1回、180個で10回引けるよ",
+  "Vol.2は夢の欠片30個で1回、270個で10回引けるよ",
+  "Vol.3は夢の欠片50個で1回、450個で10回引けるよ",
+  "Vol.4は夢の欠片100個で1回引けるよ",
+  "10回まとめて引くと、1回ずつ引くより夢の欠片がおトク！",
+  "ガチャのカードは全部で100枚！Vol.1〜3が25枚ずつ、Vol.4は25ピース",
+  "Vol.2は、Vol.1をコンプリートしてワールド6を開放すると解放されるよ",
+  "Vol.3は、Vol.2をコンプリートしてワールド7を開放すると解放されるよ",
+  "Vol.4は、Vol.1〜3をすべてコンプリートしてワールド9を開放すると解放されるよ",
+  "Vol.1〜3は同じカードが2枚ずつ入ったボックス方式。最大50回で必ずコンプリートできるよ",
+  "Vol.1なら10回引きを5回、夢の欠片900個で必ずコンプリートできるよ",
+  "Vol.4は1回引くごとに、新しいピースが1枚ずつ手に入るよ",
+  "Vol.4 虹の架け橋は、25ピースを集めて1枚の絵を完成させるパズルガチャ",
+  "Vol.1〜4をすべてコンプリートすると、エピローグが待っているよ",
+  "引いたカードは「コレクション」でいつでも見返せるよ",
+  "コレクションでは、Volごとのコンプリート状況も確認できるよ",
+  "初めて手に入れたカードは、1枚ずつじっくりお披露目されるよ",
+  "ガチャ演出は「スキップ」で飛ばすこともできるよ",
+  "夢の欠片の残りは、画面上部の黄色い枠でいつでも確認できるよ",
+  "わからないことは右上の「LINE」ボタンから聞いてね",
+]
 const DEMO_EMAIL  = "questa@tkm.demo"   // デモ1：originsのみ・100万コイン
 const DEMO2_EMAIL = "questa2@tkm.demo"  // デモ2：全ワールド開放・questpia残り4枚・100万コイン
 const DEMO_INITIAL_COINS = 1000000
@@ -362,6 +385,21 @@ export default function WorldQuestGacha() {
   const [loginStage, setLoginStage] = useState<"user" | "cards" | "images" | "done">("user")
   const [loginProgress, setLoginProgress] = useState(0)
   const [loginSlow, setLoginSlow] = useState(false)
+  const [loginTipIndex, setLoginTipIndex] = useState(0)
+
+  // ローディング中のミニコラムを3秒ごとにランダムで切り替える（同じものは続けない）
+  useEffect(() => {
+    if (!isLoggingIn) return
+    const pickOther = (prev: number) => {
+      if (LOADING_TIPS.length < 2) return 0
+      let next = prev
+      while (next === prev) next = Math.floor(Math.random() * LOADING_TIPS.length)
+      return next
+    }
+    setLoginTipIndex((prev) => pickOther(prev))
+    const timer = setInterval(() => setLoginTipIndex((prev) => pickOther(prev)), 3000)
+    return () => clearInterval(timer)
+  }, [isLoggingIn])
 
   // 各段階の上限に向けてバーを少しずつ進める（実際の通信が終わるまで100%にしない）
   useEffect(() => {
@@ -1119,12 +1157,6 @@ export default function WorldQuestGacha() {
     ? urPieceCount >= UR_TOTAL_PIECES
     : checkWorldCompletion(currentWorld)
 
-  const LOGIN_STAGE_LABELS = {
-    user: "会員情報を確認しています…",
-    cards: "カードデータを読み込んでいます…",
-    images: "画面を準備しています…",
-    done: "まもなく始まります",
-  } as const
   const loginDisplayProgress = Math.round(
     loginStage === "done"
       ? 100
@@ -1514,7 +1546,14 @@ export default function WorldQuestGacha() {
                   <p className="text-white/60 text-xs tracking-[0.3em] font-light">NOW LOADING</p>
                   <p className="text-white/50 text-xs font-mono">{loginDisplayProgress}%</p>
                 </div>
-                <p className="text-white/80 text-xs text-center tracking-wider">{LOGIN_STAGE_LABELS[loginStage]}</p>
+                {/* ガチャのミニコラム（3秒ごとにランダムで切り替え） */}
+                <p
+                  key={loginTipIndex}
+                  className="text-white/85 text-xs text-center leading-relaxed min-h-[2.5rem] px-1"
+                  style={{ animation: "screenFadeIn 0.5s ease-out forwards" }}
+                >
+                  {LOADING_TIPS[loginTipIndex]}
+                </p>
                 {loginSlow && loginStage !== "done" && (
                   <p className="text-white/60 text-[11px] text-center leading-relaxed">
                     通信に時間がかかっています。<br />このままお待ちください
