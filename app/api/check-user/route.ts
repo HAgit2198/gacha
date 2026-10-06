@@ -2,7 +2,7 @@ import { type NextRequest, NextResponse } from "next/server"
 import { APPS_SCRIPT_URL } from "@/lib/apps-script-config"
 
 // 利用者に表示するエラー文（内部の仕組み名は出さない）
-const USER_ERROR_MESSAGE = "ただいまアクセスが集中しています。少し時間をおいて、もう一度ログインしてください。"
+const USER_ERROR_MESSAGE = "ただいまアクセスが集中しています。もう一度ログインしてください"
 
 async function fetchWithRedirect(url: string, options: RequestInit, maxRedirects = 5): Promise<Response> {
   let currentUrl = url
