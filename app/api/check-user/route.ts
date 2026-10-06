@@ -1,6 +1,9 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { APPS_SCRIPT_URL } from "@/lib/apps-script-config"
 
+// 利用者に表示するエラー文（内部の仕組み名は出さない）
+const USER_ERROR_MESSAGE = "ただいまアクセスが集中しています。少し時間をおいて、もう一度ログインしてください。"
+
 async function fetchWithRedirect(url: string, options: RequestInit, maxRedirects = 5): Promise<Response> {
   let currentUrl = url
   let currentOptions = { ...options, redirect: "manual" as RequestRedirect }
@@ -33,7 +36,7 @@ export async function POST(request: NextRequest) {
     const MAX_ATTEMPTS = 3
     const startedAt = Date.now()
     let data: Record<string, unknown> | null = null
-    let lastError = "GASへの接続に失敗しました"
+    let lastError = "GAS fetch failed"
 
     for (let attempt = 1; attempt <= MAX_ATTEMPTS && data === null; attempt++) {
       const controller = new AbortController()
@@ -48,11 +51,11 @@ export async function POST(request: NextRequest) {
           data = JSON.parse(text)
         } catch {
           console.error(`[v0] GAS returned non-JSON (attempt ${attempt}):`, text.slice(0, 200))
-          lastError = "GASからの応答が不正です"
+          lastError = "GAS returned non-JSON"
         }
       } catch (err) {
         console.error(`[v0] GAS fetch error (attempt ${attempt}):`, err)
-        lastError = "GASへの接続に失敗しました"
+        lastError = "GAS fetch failed"
       } finally {
         clearTimeout(timeoutId)
       }
@@ -66,7 +69,8 @@ export async function POST(request: NextRequest) {
     }
 
     if (data === null) {
-      return NextResponse.json({ exists: false, error: lastError }, { status: 500 })
+      console.error("[v0] check-user giving up:", lastError)
+      return NextResponse.json({ exists: false, error: USER_ERROR_MESSAGE }, { status: 500 })
     }
 
     if (!data.exists) {
@@ -78,6 +82,6 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     console.error("[v0] check-user error:", error)
-    return NextResponse.json({ exists: false, error: "サーバーエラー" }, { status: 500 })
+    return NextResponse.json({ exists: false, error: USER_ERROR_MESSAGE }, { status: 500 })
   }
 }

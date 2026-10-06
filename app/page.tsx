@@ -1162,7 +1162,7 @@ export default function WorldQuestGacha() {
       const data = await response.json()
 
       if (!response.ok) {
-        setLoginError(data.error || "エラーが発生しました。もう一度お試しください。")
+        setLoginError(data.error || "ただいまアクセスが集中しています。少し時間をおいて、もう一度ログインしてください。")
         setIsLoggingIn(false)
         return
       }
