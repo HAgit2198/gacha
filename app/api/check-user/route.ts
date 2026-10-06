@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { APPS_SCRIPT_URL } from "@/lib/apps-script-config"
+import { parseCardKeys } from "@/lib/card-keys"
 
 // 利用者に表示するエラー文（内部の仕組み名は出さない）
 const USER_ERROR_MESSAGE = "ただいまアクセスが集中しています。もう一度ログインしてください"
@@ -60,10 +61,11 @@ export async function POST(request: NextRequest) {
         clearTimeout(timeoutId)
       }
 
-      // 次の試行（待ち時間＋最大15秒）で合計25秒を超えるなら再試行しない
+      // GASは起動直後に遅れてエラーページを返すことがあるので、間隔を空けて再試行する。
+      // 次の試行（待ち時間＋最大15秒）で合計45秒を超えるなら再試行しない（関数の上限は5分）
       if (data === null && attempt < MAX_ATTEMPTS) {
-        const backoff = 500 * attempt
-        if (Date.now() - startedAt + backoff + 15000 > 25000) break
+        const backoff = 2000 * attempt
+        if (Date.now() - startedAt + backoff + 15000 > 45000) break
         await new Promise((resolve) => setTimeout(resolve, backoff))
       }
     }
@@ -77,8 +79,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ exists: false })
     }
 
-    console.log("[v0] check-user GAS result:", data)
-    return NextResponse.json(data)
+    // 所持カードも同じ getUser の結果から返し、ログイン時の GAS 呼び出しを1回にする
+    const cards = parseCardKeys(String(data.cardKeys || "").trim())
+    return NextResponse.json({ ...data, cards })
 
   } catch (error) {
     console.error("[v0] check-user error:", error)

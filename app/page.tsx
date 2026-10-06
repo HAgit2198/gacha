@@ -520,20 +520,14 @@ export default function WorldQuestGacha() {
 
             // Then sync latest unlock state and cards from spreadsheet in background
             try {
-              const [checkRes, cardsRes] = await Promise.all([
-                fetch("/api/check-user", {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({ email: storedEmail }),
-                }),
-                fetch("/api/get-cards", {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({ email: storedEmail }),
-                }),
-              ])
+              const checkRes = await fetch("/api/check-user", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email: storedEmail }),
+              })
               const checkData = await checkRes.json()
-              const cardsData = await cardsRes.json()
+              // 所持カードは check-user が同じ GAS 呼び出しの結果から返す
+              const cardsData = checkData.exists ? checkData.cards : null
 
               if (checkData.exists) {
                 // Always use spreadsheet as source of truth for unlocks and coins
@@ -556,7 +550,7 @@ export default function WorldQuestGacha() {
                   setCompletionStatus(checkData.completionStatus)
                 }
               }
-              if (cardsData.success) {
+              if (cardsData) {
                 if (cardsData.ownedCharacters) {
                   setOwnedCharacters(cardsData.ownedCharacters)
                 }
@@ -1202,18 +1196,6 @@ export default function WorldQuestGacha() {
     }
 
     try {
-      // カードデータは会員確認と並行して取得し、待ち時間を短くする
-      const cardsPromise: Promise<any> = fetch("/api/get-cards", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: email.trim() }),
-      })
-        .then((r) => r.json())
-        .catch((cardsError) => {
-          console.error("[v0] Error loading cards:", cardsError)
-          return null
-        })
-
       const response = await fetch("/api/check-user", {
         method: "POST",
         headers: {
@@ -1250,10 +1232,10 @@ export default function WorldQuestGacha() {
           setCompletionStatus(data.completionStatus)
         }
 
-        // カードキーシートから所持カードと枚数を取得
+        // 所持カードと枚数（check-user が同じ GAS 呼び出しの結果から返す）
         setLoginStage("cards")
-        const cardsData = await cardsPromise
-        if (cardsData?.success) {
+        const cardsData = data.cards
+        if (cardsData) {
           if (cardsData.ownedCharacters) {
             setOwnedCharacters(cardsData.ownedCharacters)
           }
