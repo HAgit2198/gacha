@@ -1,5 +1,9 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { APPS_SCRIPT_URL } from "@/lib/apps-script-config"
+import { parseCardKeys } from "@/lib/card-keys"
+
+// 利用者に表示するエラー文（内部の仕組み名は出さない）
+const USER_ERROR_MESSAGE = "ただいまアクセスが集中しています。もう一度ログインしてください"
 
 async function fetchWithRedirect(url: string, options: RequestInit, maxRedirects = 5): Promise<Response> {
   let currentUrl = url
@@ -33,7 +37,7 @@ export async function POST(request: NextRequest) {
     const MAX_ATTEMPTS = 3
     const startedAt = Date.now()
     let data: Record<string, unknown> | null = null
-    let lastError = "GASへの接続に失敗しました"
+    let lastError = "GAS fetch failed"
 
     for (let attempt = 1; attempt <= MAX_ATTEMPTS && data === null; attempt++) {
       const controller = new AbortController()
@@ -48,36 +52,39 @@ export async function POST(request: NextRequest) {
           data = JSON.parse(text)
         } catch {
           console.error(`[v0] GAS returned non-JSON (attempt ${attempt}):`, text.slice(0, 200))
-          lastError = "GASからの応答が不正です"
+          lastError = "GAS returned non-JSON"
         }
       } catch (err) {
         console.error(`[v0] GAS fetch error (attempt ${attempt}):`, err)
-        lastError = "GASへの接続に失敗しました"
+        lastError = "GAS fetch failed"
       } finally {
         clearTimeout(timeoutId)
       }
 
-      // 次の試行（待ち時間＋最大15秒）で合計25秒を超えるなら再試行しない
+      // GASは起動直後に遅れてエラーページを返すことがあるので、間隔を空けて再試行する。
+      // 次の試行（待ち時間＋最大15秒）で合計45秒を超えるなら再試行しない（関数の上限は5分）
       if (data === null && attempt < MAX_ATTEMPTS) {
-        const backoff = 500 * attempt
-        if (Date.now() - startedAt + backoff + 15000 > 25000) break
+        const backoff = 2000 * attempt
+        if (Date.now() - startedAt + backoff + 15000 > 45000) break
         await new Promise((resolve) => setTimeout(resolve, backoff))
       }
     }
 
     if (data === null) {
-      return NextResponse.json({ exists: false, error: lastError }, { status: 500 })
+      console.error("[v0] check-user giving up:", lastError)
+      return NextResponse.json({ exists: false, error: USER_ERROR_MESSAGE }, { status: 500 })
     }
 
     if (!data.exists) {
       return NextResponse.json({ exists: false })
     }
 
-    console.log("[v0] check-user GAS result:", data)
-    return NextResponse.json(data)
+    // 所持カードも同じ getUser の結果から返し、ログイン時の GAS 呼び出しを1回にする
+    const cards = parseCardKeys(String(data.cardKeys || "").trim())
+    return NextResponse.json({ ...data, cards })
 
   } catch (error) {
     console.error("[v0] check-user error:", error)
-    return NextResponse.json({ exists: false, error: "サーバーエラー" }, { status: 500 })
+    return NextResponse.json({ exists: false, error: USER_ERROR_MESSAGE }, { status: 500 })
   }
 }
