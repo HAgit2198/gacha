@@ -1,4 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
+import { APPS_SCRIPT_URL } from "@/lib/apps-script-config"
 
 // カードIDを短縮形式に変換
 // origins_1 -> n1, elements_17 -> r17, beyond_6 -> s6, questpia_3 -> u3
@@ -26,11 +27,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: true })
     }
 
-    const gasUrl = process.env.GAS_WEBHOOK_URL
-    if (!gasUrl) {
-      console.warn("[v0] GAS_WEBHOOK_URL not set, skipping gacha log")
-      return NextResponse.json({ success: true })
-    }
+    const gasUrl = APPS_SCRIPT_URL
 
     const cardArray: string[] = Array.isArray(drawnCards)
       ? drawnCards
